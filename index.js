@@ -16,32 +16,28 @@ document.addEventListener("DOMContentLoaded", function() {
     if ( keypress == "ArrowRight" ) { movesStack.push( "right" ); }
     if ( keypress == "ArrowUp" ) { movesStack.push( "up" ); }
     if ( keypress == "ArrowDown" ) { movesStack.push( "down" ); }
-    if ( [ "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown" ].includes( keypress ) ) {
-      renderStack();
-    }
+    if ( [ "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown" ].includes( keypress ) ) { renderStack(); }
   }
 
   function renderStack() {
     movesContainer.innerText = "";
-    movesStack.forEach(move => {
+    movesStack.forEach( move => {
       const thisMove = document.createElement( "li" );
       thisMove.innerText = move;
       movesContainer.append( thisMove );
     });
   }
 
-  function moveBot9000() {
-    let currentMove = movesStack.shift();
-    move(currentMove);
-    renderStack();
-  }
-  
   function startMoving() {
-    setInterval( moveBot9000, 500 );
-  }
-
-  function stopMoving() {
-    clearInterval( moveBot9000 );
+    let timer = setInterval( moveBot9000, 500 );
+    function moveBot9000() {
+      if ( !movesStack.length ) {
+        clearInterval( timer )
+      } else {
+        move( movesStack.shift() );
+        renderStack();
+      }
+    }
   }
 
   document.addEventListener( "keydown", addMoveToStack );
@@ -49,12 +45,3 @@ document.addEventListener("DOMContentLoaded", function() {
 } );
 
 // !movesStack.length -- true if movesStack is empty
-// if ( !movesStack.length ) { stopMoving(); }
-// () => {
-//   if ( !movesStack.length ) {
-//     stopMoving();
-//   } else {
-//     moveBot9000();
-//   }
-// }
-
